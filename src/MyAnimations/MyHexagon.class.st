@@ -77,7 +77,7 @@ MyHexagon >> renderHxgIn: aCanvas [
 	aCanvas add: (RSPolygon new
 		points: outers;
 		noPaint; 
-		border: (RSBorder new);
+		border: (RSBorder new color: Color green );
 		yourself)
 ]
 
@@ -89,10 +89,13 @@ MyHexagon >> renderIn: aCanvas [
 
 { #category : #rendering }
 MyHexagon >> renderSubHxgsIn: aCanvas [
-	
+	| width |
+	width := 1- (0.2*level).
 	mids with: struts do: [ :mid :strut | 
 		aCanvas add: (RSLine new
 			startPoint: mid;
+			color: Color green;
+			width: width;
 			endPoint: strut;
 			yourself)
 		 ].
@@ -100,6 +103,8 @@ MyHexagon >> renderSubHxgsIn: aCanvas [
 		aCanvas add: (RSLine new
 			startPoint: (quars at: i);
 			endPoint: (quars at: i + 1);
+			color: Color green;
+			width: width;
 			yourself)
 		].
 	0 to: struts size - 1 do: [ :i | | j |
@@ -107,6 +112,8 @@ MyHexagon >> renderSubHxgsIn: aCanvas [
 		aCanvas add: (RSLine new
 			startPoint: (struts at: i +1);
 			endPoint: (struts at: j + 1);
+			color: Color green;
+			width: width;
 			yourself)
 		 ].
 	level < maxLevel ifFalse: [ ^ self ].

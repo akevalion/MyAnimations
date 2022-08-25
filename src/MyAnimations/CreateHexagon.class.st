@@ -21,7 +21,7 @@ Class {
 { #category : #initialization }
 CreateHexagon >> initialize [
 	super initialize.
-	perlin := NSPerlinNoise3 new octaves: 3.
+	perlin := NSPerlinNoise3 new octaves: 1.
 	strutF := self random: 100.
 	rRangeF := self random: 100.
 	rnRangeF := self random: 100.
@@ -33,7 +33,7 @@ CreateHexagon >> initialize [
 	hxg := MyHexagon new
 		index: 6;
 		level: 0;
-		maxLevel: 3;
+		maxLevel: 4;
 		yourself.
 	initVs := (1 to: 6) collect: [ :i | 0@0 ].
 ]
@@ -45,26 +45,60 @@ CreateHexagon >> random: aNumber [
 
 { #category : #hooks }
 CreateHexagon >> renderIn: aCanvas [
+	| scale position sign background |
+	aCanvas color: Color gray darker.
+	background := RSBox new
+		extent: 2000 asPoint;
+		paint: (RadialGradientPaint new
+			colorRamp: { 
+				0 -> Color black.
+				0.75 -> Color gray darker };
+			center: 0@0;
+			radius: 500;
+			focalPoint: 0@0;
+			yourself)
+		yourself.
 	aCanvas newAnimation
 		repeat;
 		onStepDo: [ :t |
 			self updateInitVs.
-			aCanvas shapes size traceCr.
 			hxg update:initVs strut: strutF perlin: perlin.
+			
 			aCanvas shapes copy do: #remove.
+			aCanvas add: background.
 			hxg renderIn: aCanvas.
 			strutF := strutF + strutFIncre.
-			aCanvas zoomToFit.
 			 ].
+	scale := 1.
+	position := 0@0.
+	sign := 1.
+	aCanvas newAnimation
+		delay: 2 seconds;
+		repeat;
+		onStepDo: [ :t | | value |
+			value := (perlin noise: strutF * 0.7 and: 0)*0.01.
+			
+			scale := scale + (sign * value).
+			scale > 4 ifTrue: [ sign := sign * -1 ].
+			value := (perlin noise:  Time millisecondClockValue * 0.01 and: 0) * Float twoPi.
+			position := scale > 2
+				ifTrue: [ position "+ ((value sin @ value cos)*scale / 2) "]
+				ifFalse: [ 0@0 ].
+			aCanvas camera
+				scale: scale;
+				position: position
+			 ].
+		
 ]
 
 { #category : #running }
 CreateHexagon >> run [
 	<script: 'self new run'>
+	"self open"
 	self build.
-	self canvas extent: 720@720.
+	self canvas extent: 1920@1440.
 	self canvas videoExporter
-		duration: 10 seconds;
+		duration: 20 seconds;
 		export
 ]
 
