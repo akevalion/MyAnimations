@@ -1,5 +1,5 @@
 Class {
-	#name : #CreateHexagon,
+	#name : #HexagonCellVisualization,
 	#superclass : #RSAbstractContainerBuilder,
 	#instVars : [
 		'colors',
@@ -15,11 +15,11 @@ Class {
 		'initVs',
 		'perlin'
 	],
-	#category : #MyAnimations
+	#category : #'MyAnimations-Hexagon'
 }
 
 { #category : #initialization }
-CreateHexagon >> initialize [
+HexagonCellVisualization >> initialize [
 	super initialize.
 	perlin := NSPerlinNoise3 new octaves: 1.
 	strutF := self random: 100.
@@ -39,12 +39,12 @@ CreateHexagon >> initialize [
 ]
 
 { #category : #initialization }
-CreateHexagon >> random: aNumber [
+HexagonCellVisualization >> random: aNumber [
 	^ SharedRandom globalGenerator next * aNumber
 ]
 
 { #category : #hooks }
-CreateHexagon >> renderIn: aCanvas [
+HexagonCellVisualization >> renderIn: aCanvas [
 	| scale position sign background |
 	aCanvas color: Color gray darker.
 	background := RSBox new
@@ -92,18 +92,18 @@ CreateHexagon >> renderIn: aCanvas [
 ]
 
 { #category : #running }
-CreateHexagon >> run [
+HexagonCellVisualization >> run [
 	<script: 'self new run'>
-	"self open"
-	self build.
+	self open
+	"self build.
 	self canvas extent: 1920@1440.
 	self canvas videoExporter
 		duration: 20 seconds;
-		export
+		export"
 ]
 
 { #category : #hooks }
-CreateHexagon >> updateInitVs [
+HexagonCellVisualization >> updateInitVs [
 	| rnIncre |
 	rnIncre := Float pi / 3.0.
 	

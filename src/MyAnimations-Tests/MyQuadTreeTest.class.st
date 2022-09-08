@@ -12,15 +12,13 @@ MyQuadTreeTest >> testAddNElements [
 	| tree boxes n |
 	n := 10.
 	(1 to: n) do: [ :index | 
-		tree := MyQuadTree new.
-		self deny: tree isLeaf.
 		boxes := (1 to: index) collect: [ :each | 
 			RSBox new
 				model: each;
 				extent: 10@10;
 				yourself ] as: RSGroup.
 		RSGridLayout on: boxes.
-		tree addAll: boxes.
+		tree := MyQuadTree withAll: boxes.
 		
 		self assert: tree size equals: index.
 		self assert: tree rectangle equals: boxes encompassingRectangle.
@@ -42,18 +40,18 @@ MyQuadTreeTest >> testHeight [
 	| tree group |
 	tree := MyQuadTree new.
 	self assert: tree height equals: 0.
-	tree addAll: { RSBox new } asGroup.
-	self assert: tree height equals: 1.
+	tree := MyQuadTree withAll: { RSBox new } asGroup.
+	self assert: tree height equals: 2.
 	
-	tree := MyQuadTree new.
+	
 	group := { RSBox new. RSBox new } asGroup.
 	RSGridLayout on: group.
-	tree addAll: group.
+	tree := MyQuadTree withAll: group.
 	self assert: tree height equals: 2.
 	
-	tree := MyQuadTree new.
+	
 	group := { RSBox new. RSBox new. RSBox new } asGroup.
 	RSGridLayout on: group.
-	tree addAll: group.
-	self assert: tree height equals: 2.
+	tree := MyQuadTree withAll: group.
+	self assert: tree height equals: 3.
 ]

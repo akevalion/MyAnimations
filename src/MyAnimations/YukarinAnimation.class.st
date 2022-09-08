@@ -1,7 +1,7 @@
 Class {
 	#name : #YukarinAnimation,
 	#superclass : #RSAbstractContainerBuilder,
-	#category : #MyAnimations
+	#category : #'MyAnimations-Yukarin'
 }
 
 { #category : #hooks }
@@ -84,7 +84,7 @@ YukarinAnimation >> renderIn: aCanvas [
 	
 	aCanvas newAnimation
 		delay: 0 seconds;
-		easing: RSEasingInterpolator bounceOut;
+		easing: RSEasingInterpolator quadOut;
 		duration: 10 seconds;
 		from: a position;
 		to: b position;

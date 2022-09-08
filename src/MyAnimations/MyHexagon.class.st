@@ -11,7 +11,7 @@ Class {
 		'quars',
 		'subHxgs'
 	],
-	#category : #MyAnimations
+	#category : #'MyAnimations-Hexagon'
 }
 
 { #category : #accessing }
@@ -66,7 +66,7 @@ MyHexagon >> maxLevel: anObject [
 		maxLevel: maxLevel ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MyHexagon >> pointInP1: v1 p2: v2 ratio: ratio [
 	^ (v1 * ratio) + (v2 * (1 - ratio))
 	
@@ -122,7 +122,7 @@ MyHexagon >> renderSubHxgsIn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MyHexagon >> update: values strut: strutF perlin: perlin [
 	| strut |
 	outers := values.
@@ -146,7 +146,7 @@ MyHexagon >> update: values strut: strutF perlin: perlin [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MyHexagon >> updateMids [
 	mids := (1 to: mids size) collect: [ :i | | j |
 		j := i % mids size.
@@ -154,7 +154,7 @@ MyHexagon >> updateMids [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MyHexagon >> updateQuars [
 	0 to: 11 by: 2 do: [ :i | | j |
 		j := (i/2 + 1) % mids size + 1.
@@ -162,7 +162,7 @@ MyHexagon >> updateQuars [
 		quars at: i+2 put: (self pointInP1: (outers at: j)  p2: (mids at: j) ratio: 0.5) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MyHexagon >> updateStruts: perlin strut: strutF [
 	| strut |
 	strut := strutF.

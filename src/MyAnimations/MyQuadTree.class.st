@@ -9,13 +9,18 @@ Class {
 		'rectangle',
 		'parent'
 	],
-	#category : #MyAnimations
+	#category : #'MyAnimations-Quadtree'
 }
 
 { #category : #'instance creation' }
 MyQuadTree class >> withAll: nodes [
+	^ self withAll: nodes square: false
+]
+
+{ #category : #'instance creation' }
+MyQuadTree class >> withAll: nodes square: isSquare [
 	^ self new
-		addAll: nodes;
+		addAll: nodes square: isSquare;
 		yourself
 ]
 
@@ -25,12 +30,15 @@ MyQuadTree >> add: aNode [
 ]
 
 { #category : #adding }
-MyQuadTree >> addAll: aGroup [
-	| rect ext |
+MyQuadTree >> addAll: aGroup square: isSquare [
+	| rect |
 	rect := aGroup encompassingRectangle.
-	ext := rect extent max / 2.
-	ext := ext @ ext.
-	self bulkLoad: aGroup rectangle: (rect floatCenter - ext corner: rect floatCenter + ext).
+	isSquare ifTrue: [ | ext |
+		ext := rect extent max.
+		
+		rect := (rect floatCenter - (ext / 2)) corner: (rect floatCenter + (ext / 2))
+		].
+	self bulkLoad: aGroup rectangle: rect.
 ]
 
 { #category : #'private - adding' }
@@ -44,7 +52,7 @@ MyQuadTree >> bulkLoad: aRSGroup rectangle: aRectangle [
 	rectangle := aRectangle.
 	aRSGroup ifEmpty: [ ^ self ].
 	
-	(aRSGroup size = 1 and: [ aRSGroup first encompassingRectangle area > rectangle area  ])
+	(aRSGroup size = 1 and: [ aRSGroup first encompassingRectangle area >= rectangle area  ])
 		ifTrue: [ ^ self addSoleChild: aRSGroup first ].
 	subQuads := self computeAreas collectWithIndex: [ :area :index |
 		| shapesInArea child  |
