@@ -41,7 +41,6 @@ MyQuadTreeAnimation >> animate: aTree [
 { #category : #accessing }
 MyQuadTreeAnimation >> colorFor: aTree [
 	^ aTree color ifNil: [ 
-		"aTree parent color alpha: 0.2"
 		Color colorFrom: '#1065c0' ]
 ]
 
