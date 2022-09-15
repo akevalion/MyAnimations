@@ -1,7 +1,7 @@
 # MyAnimations
-my personal creations
+My personal animations.
 
-To used download last version of Roassal3 in pharo11.
+To used download last version of Roassal3 in pharo11, in macOs.
 
 ```st
 [Metacello new
