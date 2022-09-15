@@ -12,5 +12,9 @@ Metacello new
     baseline: 'Roassal3Exporters';
     repository: 'github://ObjectProfile/Roassal3Exporters';
     load: 'Video'.
+Metacello new
+    baseline: 'AIImageSegmentation';
+    repository: 'github://pharo-ai/image-segmentation';
+    load.
     ] on: MCMergeOrLoadWarning do: [:warning | warning load ]
 ```
