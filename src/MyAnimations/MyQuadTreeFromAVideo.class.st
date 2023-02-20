@@ -2,7 +2,6 @@ Class {
 	#name : #MyQuadTreeFromAVideo,
 	#superclass : #Object,
 	#instVars : [
-		'colors',
 		'backgroundColor',
 		'shapes'
 	],

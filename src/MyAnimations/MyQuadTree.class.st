@@ -114,7 +114,6 @@ MyQuadTree >> height [
 MyQuadTree >> initialize [
 	super initialize.
 	isLeaf := false.
-	rectangle := nil.
 	subQuads := #().
 ]
 
