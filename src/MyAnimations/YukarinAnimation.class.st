@@ -40,61 +40,65 @@ YukarinAnimation >> newEllipse: letter [
 
 { #category : #hooks }
 YukarinAnimation >> renderIn: aCanvas [
-	| frames image a b line | 
+
+	| frames image a b line |
 	frames := self computeFrames.
 
 	image := RSBitmap new.
-	image scaleBy: -1@1.
+	image scaleBy: -1 @ 1.
 	aCanvas add: image.
 
 	image form: frames first.
-	image position: (0@image height/ -2).
+	image position: 0 @ image height / -2.
 	aCanvas newAnimation
 		repeat;
 		duration: 200 milliSeconds;
-		when: RSAnimationLoopEvent do: [ :evt | | i |
+		when: RSAnimationLoopEvent do: [ :evt |
+			| i |
 			i := evt currentLoop % 10.
 			image remove.
 			image := RSBitmap new.
-			image scaleBy: -1@1.
+			image scaleBy: -1 @ 1.
 			image form: (frames at: i + 1).
-			image position: (0@image height/ -2).
+			image position: 0 @ image height / -2.
 			aCanvas add: image.
 			image pushBack.
-			evt signalUpdate ].
-	
+			evt signalUpdate ]
+		for: self.
+
 	a := self newEllipse: 'A'.
-	a position: -500@0.
+	a position: -500 @ 0.
 
 	b := self newEllipse: 'B'.
-	b position: 500@0.
+	b position: 500 @ 0.
 	line := RSLine new
-		from: a;
-		to: b;
-		width: 20;
-		capRound;
-		attachPoint: (RSBorderAttachPoint new
-			startOffset: 25/2;
-			endOffset: 25);
-		markerEnd: (RSShapeFactory arrow
-			size: 50);
-		color: Color black;
-		yourself.
-	aCanvas addAll: { a. b. line }.
-	
+		        from: a;
+		        to: b;
+		        width: 20;
+		        capRound;
+		        attachPoint: (RSBorderAttachPoint new
+				         startOffset: 25 / 2;
+				         endOffset: 25);
+		        markerEnd: (RSShapeFactory arrow size: 50);
+		        color: Color black;
+		        yourself.
+	aCanvas addAll: {
+			a.
+			b.
+			line }.
+
 	aCanvas newAnimation
 		delay: 0 seconds;
 		easing: RSEasingInterpolator quadOut;
 		duration: 10 seconds;
 		from: a position;
 		to: b position;
-		onStepDo: [ :t | 
-			image position: t+(0@image height/ -2) ].
+		onStepDo: [ :t | image position: t + (0 @ image height / -2) ].
 
-	aCanvas when: RSExtentChangedEvent do: [ :evt | aCanvas zoomToFit ].
-
-	
-	
+	aCanvas
+		when: RSExtentChangedEvent
+		do: [ :evt | aCanvas zoomToFit ]
+		for: self
 ]
 
 { #category : #running }

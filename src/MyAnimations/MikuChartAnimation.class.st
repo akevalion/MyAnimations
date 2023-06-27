@@ -81,65 +81,68 @@ MikuChartAnimation >> renderCirclesTime: t [
 
 { #category : #hooks }
 MikuChartAnimation >> renderIn: aCanvas [
+
 	| background miku round t |
 	aCanvas color: Color black.
 	background := RSBitmap new form: (self imageNamed: 'bg_main.jpg').
 	background scaleBy: 1.5.
 	miku := RSBitmap new form: (self imageNamed: 'miku_main.png').
 	round := RSBitmap new form: (self imageNamed: 'round.png').
-	
-	aCanvas addAll: {background. round. miku}.
-	aCanvas when: RSExtentChangedEvent do: [ :evt | 
-		aCanvas camera 
-			zoomToFit: aCanvas extent max asPoint
-			rectangle: background encompassingRectangle  ].
-	
+
+	aCanvas addAll: {
+			background.
+			round.
+			miku }.
+	aCanvas
+		when: RSExtentChangedEvent
+		do: [ :evt |
+			aCanvas camera
+				zoomToFit: aCanvas extent max asPoint
+				rectangle: background encompassingRectangle ]
+		for: self.
+
 	aCanvas newAnimation
 		repeat;
 		from: 0;
 		to: 360;
 		duration: 15 seconds;
-		onStepDo: [ :angle | 
-			miku position: (0 @ angle degreesToRadians sin * 100).
-			 ].
+		onStepDo: [ :angle |
+			miku position: 0 @ angle degreesToRadians sin * 100 ].
 	t := 0.
 	aCanvas animationFrom: {
-		aCanvas transitionAnimation
-			loops: 6 * 5; 
-			duration: 10 seconds;
-			from: 0;
-			to: 360;
-			onStepDo: [ :newAngle| 
-				round matrix 
-					loadIdentity;
-					rotateByDegrees: newAngle.
-				aCanvas signalUpdate.
-				].
-		aCanvas transitionAnimation
-			duration: 10 seconds;
-			from: 0;
-			to: 360;
-			onStepDo: [ :newAngle |
-				round matrix 
-					loadIdentity;
-					scaleBy: (360 - newAngle) / 360.0;
-					rotateByDegrees: newAngle.
-				aCanvas signalUpdate.
-				];
-			when: RSAnimationEndEvent do: [ round remove ];
-			yourself.
-		aCanvas transitionAnimation
-			repeat;
-			onStepDo: [ | circles |
-				aCanvas propertyAt: #circles ifPresent: [ :c | c do: #remove ].
-				circles := self renderCirclesTime: t.
-				aCanvas propertyAt: #circles put: circles.
-				aCanvas addAll: circles.
-				miku pushFront.
-				t := t + 1.
-				 ];
-			yourself
-	}
+			(aCanvas transitionAnimation
+				 loops: 6 * 5;
+				 duration: 10 seconds;
+				 from: 0;
+				 to: 360;
+				 onStepDo: [ :newAngle |
+					 round matrix
+						 loadIdentity;
+						 rotateByDegrees: newAngle.
+					 aCanvas signalUpdate ]).
+			(aCanvas transitionAnimation
+				 duration: 10 seconds;
+				 from: 0;
+				 to: 360;
+				 onStepDo: [ :newAngle |
+					 round matrix
+						 loadIdentity;
+						 scaleBy: 360 - newAngle / 360.0;
+						 rotateByDegrees: newAngle.
+					 aCanvas signalUpdate ];
+				 when: RSAnimationEndEvent do: [ round remove ] for: self;
+				 yourself).
+			(aCanvas transitionAnimation
+				 repeat;
+				 onStepDo: [
+					 | circles |
+					 aCanvas propertyAt: #circles ifPresent: [ :c | c do: #remove ].
+					 circles := self renderCirclesTime: t.
+					 aCanvas propertyAt: #circles put: circles.
+					 aCanvas addAll: circles.
+					 miku pushFront.
+					 t := t + 1 ];
+				 yourself) }
 ]
 
 { #category : #running }
